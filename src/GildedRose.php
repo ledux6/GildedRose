@@ -16,55 +16,68 @@ final class GildedRose {
                 $item->quality = 80;
             }
             elseif  ($item->name == 'Aged Brie'){
-                if ($item->quality < 50) {
-                    $item->quality = $item->quality + 1;
-                }
-                $item->sell_in = $item->sell_in - 1;
+                $this->updateAgedBrie($item);
             }
             elseif ($item->name == 'Backstage passes to a TAFKAL80ETC concert'){
-                if ($item->quality < 50) {
-                    $item->quality = $item->quality + 1;
-                    if ($item->sell_in < 11) {
-                        if ($item->quality < 50) {
-                            $item->quality = $item->quality + 1;
-                        }
-                    }
-                    if ($item->sell_in < 6) {
-                        if ($item->quality < 50) {
-                            $item->quality = $item->quality + 1;
-                        }
-                    }
-
-                }
-                $item->sell_in = $item->sell_in - 1;
-                if ($item->sell_in < 0) {
-                    $item->quality = $item->quality - $item->quality;
-                }
+                $this->updateBackstagePass($item);
             }
             elseif ($item->name == 'Conjured Mana Cake'){
-                if ($item->quality > 1){
-                    $item->quality = $item->quality - 2;
-                }
-                if ($item->quality > 1){
-                    if($item->sell_in < 1) {
-                        $item->quality = $item->quality - 2;
-                    }
-                }
+                $this->updateConjuredItem($item);
             }
             else{
-                if ($item->quality > 0){
-                    $item->quality = $item->quality - 1;
+                $this->updateGenericItem($item);
+            }
+        }
+    }
+
+    public function updateAgedBrie($item){
+        if ($item->quality < 50) {
+            $item->quality = $item->quality + 1;
+        }
+        $item->sell_in = $item->sell_in - 1;
+    }
+
+    public function updateBackstagePass($item){
+        if ($item->quality < 50) {
+            $item->quality = $item->quality + 1;
+            if ($item->sell_in < 11) {
+                if ($item->quality < 50) {
+                    $item->quality = $item->quality + 1;
                 }
-                if ($item->quality > 0){
-                    if ($item->sell_in < 1) {
-                        $item->quality = $item->quality - 1;
-                    }
-                }
-                if ($item->sell_in > 0){
-                    $item->sell_in = $item->sell_in - 1;
+            }
+            if ($item->sell_in < 6) {
+                if ($item->quality < 50) {
+                    $item->quality = $item->quality + 1;
                 }
             }
         }
+        $item->sell_in = $item->sell_in - 1;
+        if ($item->sell_in < 0) {
+            $item->quality = 0;
+        }
+    }
+
+    public function updateConjuredItem($item){
+        if ($item->quality > 1){
+            $item->quality = $item->quality - 2;
+        }
+        if ($item->quality > 1){
+            if($item->sell_in < 1) {
+                $item->quality = $item->quality - 2;
+            }
+        }
+    }
+
+    public function updateGenericItem($item){
+        if ($item->quality > 0){
+            $item->quality = $item->quality - 1;
+        }
+        if ($item->quality > 0){
+            if ($item->sell_in < 1) {
+                $item->quality = $item->quality - 1;
+            }
+        }
+        $item->sell_in = $item->sell_in - 1;
     }
 
 //    public function updateQuality() {
