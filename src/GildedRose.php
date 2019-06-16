@@ -31,25 +31,17 @@ final class GildedRose {
     }
 
     public function updateAgedBrie($item){
-        if ($item->quality < 50) {
-            $item->quality = $item->quality + 1;
-        }
+        $this->increaseQuality($item);
         $item->sell_in = $item->sell_in - 1;
     }
 
     public function updateBackstagePass($item){
-        if ($item->quality < 50) {
-            $item->quality = $item->quality + 1;
-            if ($item->sell_in < 11) {
-                if ($item->quality < 50) {
-                    $item->quality = $item->quality + 1;
-                }
-            }
-            if ($item->sell_in < 6) {
-                if ($item->quality < 50) {
-                    $item->quality = $item->quality + 1;
-                }
-            }
+        $this->increaseQuality($item);
+        if ($item->sell_in < 11) {
+            $this->increaseQuality($item);
+        }
+        if ($item->sell_in < 6) {
+            $this->increaseQuality($item);
         }
         $item->sell_in = $item->sell_in - 1;
         if ($item->sell_in < 0) {
@@ -58,26 +50,33 @@ final class GildedRose {
     }
 
     public function updateConjuredItem($item){
-        if ($item->quality > 1){
-            $item->quality = $item->quality - 2;
+        $this->decreaseQuality($item,2);
+        if($item->sell_in < 1) {
+            $this->decreaseQuality($item,2);
         }
-        if ($item->quality > 1){
-            if($item->sell_in < 1) {
-                $item->quality = $item->quality - 2;
-            }
-        }
+        $item->sell_in = $item->sell_in - 1;
     }
 
     public function updateGenericItem($item){
-        if ($item->quality > 0){
-            $item->quality = $item->quality - 1;
+        $this->decreaseQuality($item,1);
+        if ($item->sell_in < 1) {
+            $this->decreaseQuality($item,1);
         }
-        if ($item->quality > 0){
-            if ($item->sell_in < 1) {
+        $item->sell_in = $item->sell_in - 1;
+    }
+
+    public function increaseQuality($item){
+        if ($item->quality < 50) {
+            $item->quality = $item->quality + 1;
+        }
+    }
+    public function decreaseQuality($item, $decreaseBy)
+    {
+        for ($i = 0; $i < $decreaseBy; $i++){
+            if ($item->quality > 0) {
                 $item->quality = $item->quality - 1;
             }
         }
-        $item->sell_in = $item->sell_in - 1;
     }
 
 //    public function updateQuality() {
